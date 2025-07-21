@@ -1,0 +1,6 @@
+
+repository:
+  # See https://github.com/apps/settings for all available settings.
+  name: data-java-exercise
+  description: null
+  topics: squad-cards, mission-spend, product-transactional-bank, environment-sandbox
