@@ -15,6 +15,7 @@ class ConsumerTest {
     
     private Consumer consumer;
     private List<Invoice> testInvoices;
+    private InvoiceStatistics stats;
     
     @BeforeEach
     void setUp() throws IOException {
@@ -22,6 +23,7 @@ class ConsumerTest {
         consumer = new Consumer(testCurrDate);
         CsvInvoiceReader csvReader = new CsvInvoiceReader();
         testInvoices = csvReader.readInvoices("invoices.csv");
+        stats = consumer.consumeInvoices(testInvoices);
     }
     
     @Test
@@ -45,9 +47,8 @@ class ConsumerTest {
     @Test
     @DisplayName("Total number of invoices per organisation should match")
     void testInvoicesPerOrgCount(){
-        InvoiceStatistics result = consumer.consumeInvoices(testInvoices);
-        assertNotNull(result);
-        Map<Integer,Integer> invoiceCountByOrg = result.getInvoicesCountByOrgMap();
+        assertNotNull(stats);
+        Map<Integer,Integer> invoiceCountByOrg = stats.getInvoicesCountByOrgMap();
 
         Map<Integer,Integer> expectedResultMap=new HashMap<>();
         expectedResultMap.put(1000,5);
@@ -58,9 +59,9 @@ class ConsumerTest {
     @Test
     @DisplayName("Total number of Over due invoices per organisation should match")
     void testOverDueInvoicesCountByOrg(){
-        InvoiceStatistics result = consumer.consumeInvoices(testInvoices);
-        assertNotNull(result);
-        Map<Integer,Integer> overDueInvoiceCountByOrg = result.getOverDueInvoicesCountByOrg();
+
+        assertNotNull(stats);
+        Map<Integer,Integer> overDueInvoiceCountByOrg = stats.getOverDueInvoicesCountByOrg();
 
         Map<Integer,Integer> expectedResultMap=new HashMap<>();
         expectedResultMap.put(1000,2);
@@ -71,9 +72,9 @@ class ConsumerTest {
     @Test
     @DisplayName("Total number of invoices per organisation per month should match")
     void testInvoicesCountByOrgMapByMonth(){
-        InvoiceStatistics result = consumer.consumeInvoices(testInvoices);
-        assertNotNull(result);
-        Map<Integer, Map<Integer, Integer>> invoiceCountByOrgByMonth = result.getInvoicesCountByOrgMapByMonth();
+
+        assertNotNull(stats);
+        Map<Integer, Map<Integer, Integer>> invoiceCountByOrgByMonth = stats.getInvoicesCountByOrgMapByMonth();
 
         Map<Integer,Map<Integer, Integer>> expectedResultMap=new HashMap<>();
         HashMap<Integer, Integer> account1MonthlyMap = new HashMap<>();;
